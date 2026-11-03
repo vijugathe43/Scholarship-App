@@ -16,6 +16,20 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
+      - name: Detect and Fix Directory Structure
+        run: |
+          echo "Current directory contents:"
+          ls -la
+          if [ -d "Scolarship Project" ]; then
+            echo "Moving files from 'Scolarship Project' to root"
+            cp -r "Scolarship Project"/* .
+          elif [ -d "Scholarship Project" ]; then
+            echo "Moving files from 'Scholarship Project' to root"
+            cp -r "Scholarship Project"/* .
+          fi
+          mkdir -p assets
+          ls -la
+
       - name: Set up Java JDK
         uses: actions/setup-java@v4
         with:
@@ -28,9 +42,8 @@ jobs:
           channel: 'stable'
           cache: true
 
-      - name: Generate Android Platform Files
+      - name: Generate Clean Android Files
         run: |
-          mkdir -p assets
           flutter create temp_scaffold --platforms=android --org=com.scholarship.class4 --project-name=scholarship_app_4th
           cp -r temp_scaffold/android .
           rm -rf temp_scaffold
@@ -38,11 +51,12 @@ jobs:
       - name: Install Dependencies
         run: flutter pub get
 
-      - name: Build APK
+      - name: Build Debug APK
         run: flutter build apk --debug
 
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
+        if: always()
         with:
           name: ScholarshipApp-Class4-APK
-          path: build/app/outputs/flutter-apk/app-debug.apk
+          path: build/app/outputs/flutter-apk/*.apk
