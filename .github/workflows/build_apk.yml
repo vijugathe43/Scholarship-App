@@ -29,16 +29,20 @@ jobs:
           cache: true
 
       - name: Generate Android Platform Files
-        run: flutter create . --platforms=android --org=com.scholarship.class4
+        run: |
+          mkdir -p assets
+          flutter create temp_scaffold --platforms=android --org=com.scholarship.class4 --project-name=scholarship_app_4th
+          cp -r temp_scaffold/android .
+          rm -rf temp_scaffold
 
       - name: Install Dependencies
         run: flutter pub get
 
-      - name: Build Release APK
-        run: flutter build apk --release
+      - name: Build APK
+        run: flutter build apk --debug
 
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: ScholarshipApp-Class4-Release-APK
-          path: build/app/outputs/flutter-apk/app-release.apk
+          name: ScholarshipApp-Class4-APK
+          path: build/app/outputs/flutter-apk/app-debug.apk
