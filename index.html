@@ -1,0 +1,1499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Class 4 Scholarship Exam App - 100 Questions Grand Mock Test (100 Marks)</title>
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#4361EE">
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Yantramanav:wght@500;700;900&display=swap" rel="stylesheet">
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Canvas Confetti -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <style>
+    :root {
+      --primary: #4361EE;
+      --secondary: #7209B7;
+      --marathi-color: #E63946;
+      --accent-yellow: #FFB703;
+      --accent-coral: #FF5964;
+      --accent-green: #06D6A0;
+      --bg: #F4F6FB;
+      --card-bg: #FFFFFF;
+      --text-main: #1E293B;
+      --text-muted: #64748B;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Plus Jakarta Sans', 'Yantramanav', -apple-system, sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background: #0B132B;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 10px;
+    }
+
+    .phone-container {
+      width: 100%;
+      max-width: 440px;
+      height: 900px;
+      max-height: 96vh;
+      background: var(--bg);
+      border-radius: 40px;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5), 0 0 0 10px #1E293B;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .status-bar {
+      padding: 12px 24px 6px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-main);
+      z-index: 10;
+    }
+
+    .status-icons {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+    }
+
+    .app-screen {
+      flex: 1;
+      overflow-y: auto;
+      padding: 14px 18px 30px;
+      display: none;
+      animation: fadeIn 0.25s ease-in-out;
+    }
+
+    .app-screen.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .header-user {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .avatar {
+      width: 48px;
+      height: 48px;
+      background: #FFE8D6;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+    }
+
+    .user-text h2 {
+      font-size: 17px;
+      font-weight: 800;
+      color: var(--text-main);
+    }
+
+    .user-text p {
+      font-size: 12px;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    .star-badge {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      background: #FFF9DB;
+      border: 1px solid #FFE066;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-weight: 800;
+      font-size: 14px;
+      color: #D97706;
+    }
+
+    /* 100 Marks Special Grand Banner */
+    .grand-test-card {
+      background: linear-gradient(135deg, #1E1B4B 0%, #312E81 50%, #4338CA 100%);
+      border-radius: 24px;
+      padding: 18px 20px;
+      color: white;
+      margin-bottom: 16px;
+      box-shadow: 0 12px 28px rgba(49, 46, 129, 0.4);
+      position: relative;
+      overflow: hidden;
+      border: 1.5px solid #F59E0B;
+    }
+
+    .grand-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: #F59E0B;
+      color: #78350F;
+      padding: 4px 10px;
+      border-radius: 8px;
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+    }
+
+    .grand-test-card h3 {
+      font-size: 18px;
+      font-weight: 900;
+      margin-bottom: 4px;
+      line-height: 1.25;
+    }
+
+    .grand-meta-text {
+      font-size: 12px;
+      color: #E0E7FF;
+      margin-bottom: 14px;
+    }
+
+    .grand-grid-sections {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+      margin-bottom: 14px;
+    }
+
+    .grand-sec-pill {
+      background: rgba(255, 255, 255, 0.12);
+      border-radius: 8px;
+      padding: 5px 8px;
+      font-size: 11px;
+      font-weight: 700;
+      display: flex;
+      justify-content: space-between;
+      color: #F8FAFC;
+    }
+
+    .btn-grand-start {
+      background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
+      color: white;
+      border: none;
+      width: 100%;
+      padding: 12px;
+      border-radius: 14px;
+      font-weight: 900;
+      font-size: 14px;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(217, 119, 6, 0.4);
+      transition: transform 0.15s;
+    }
+
+    .btn-grand-start:active {
+      transform: scale(0.97);
+    }
+
+    /* Test Size Selector */
+    .test-modes-bar {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .test-pill {
+      flex: 1;
+      padding: 9px 4px;
+      border-radius: 14px;
+      background: white;
+      border: 1.5px solid #CBD5E1;
+      text-align: center;
+      font-size: 11.5px;
+      font-weight: 800;
+      color: #475569;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .test-pill.active {
+      background: #4361EE;
+      color: white;
+      border-color: #4361EE;
+      box-shadow: 0 4px 12px rgba(67, 97, 238, 0.28);
+    }
+
+    .section-title {
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--text-main);
+      margin-bottom: 3px;
+    }
+
+    .section-desc {
+      font-size: 11.5px;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+    }
+
+    .subject-card {
+      background: var(--card-bg);
+      border-radius: 20px;
+      padding: 14px 16px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 11px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+      cursor: pointer;
+      transition: transform 0.15s, box-shadow 0.15s;
+      border: 1px solid rgba(0,0,0,0.03);
+    }
+
+    .subject-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+    }
+
+    .subject-icon-box {
+      width: 50px;
+      height: 50px;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      flex-shrink: 0;
+    }
+
+    .subject-details h4 {
+      font-size: 15px;
+      font-weight: 800;
+      color: var(--text-main);
+      margin-bottom: 2px;
+    }
+
+    .subject-details p {
+      font-size: 11.5px;
+      color: var(--text-muted);
+      margin-bottom: 5px;
+    }
+
+    .subject-meta {
+      display: flex;
+      gap: 10px;
+      font-size: 11px;
+      color: #94A3B8;
+      font-weight: 700;
+    }
+
+    /* Top Nav & Back Button */
+    .top-nav {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .btn-back-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 12px;
+      border-radius: 14px;
+      background: white;
+      border: 1.5px solid #CBD5E1;
+      color: #1E293B;
+      font-size: 12.5px;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+      transition: all 0.15s ease;
+      flex-shrink: 0;
+    }
+
+    .btn-back-pill:hover {
+      background: #F1F5F9;
+      border-color: #94A3B8;
+      transform: translateX(-2px);
+    }
+
+    .btn-back-pill .arrow {
+      font-size: 18px;
+      line-height: 1;
+      color: #4361EE;
+      font-weight: 900;
+    }
+
+    .subject-header-banner {
+      padding: 16px;
+      border-radius: 20px;
+      color: white;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .chapter-item {
+      background: white;
+      border-radius: 16px;
+      padding: 13px 15px;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border: 1px solid #F1F5F9;
+      cursor: pointer;
+    }
+
+    .chapter-badge-count {
+      background: #EEF2FF;
+      color: #4361EE;
+      font-size: 11px;
+      font-weight: 800;
+      padding: 3px 8px;
+      border-radius: 8px;
+      margin-left: 6px;
+    }
+
+    .chapter-info h5 {
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--text-main);
+      margin-bottom: 2px;
+      display: flex;
+      align-items: center;
+    }
+
+    .chapter-info p {
+      font-size: 11.5px;
+      color: var(--text-muted);
+    }
+
+    /* Section Tabs in Quiz */
+    .section-tabs-strip {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+      margin-bottom: 10px;
+      scrollbar-width: none;
+    }
+
+    .section-tabs-strip::-webkit-scrollbar {
+      display: none;
+    }
+
+    .section-tab-chip {
+      padding: 6px 10px;
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: 800;
+      white-space: nowrap;
+      background: white;
+      border: 1.5px solid #CBD5E1;
+      color: #64748B;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.2s;
+    }
+
+    .section-tab-chip.active {
+      background: #4361EE;
+      color: white;
+      border-color: #4361EE;
+      box-shadow: 0 3px 8px rgba(67, 97, 238, 0.3);
+    }
+
+    .section-transition-card {
+      background: linear-gradient(135deg, #0F172A 0%, #1E293B 100%);
+      color: white;
+      border-radius: 18px;
+      padding: 14px 16px;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border: 1.5px solid #38BDF8;
+      animation: fadeIn 0.3s;
+    }
+
+    .section-transition-card h4 {
+      font-size: 13.5px;
+      font-weight: 800;
+      color: #38BDF8;
+      margin-bottom: 2px;
+    }
+
+    .section-transition-card p {
+      font-size: 11.5px;
+      color: #CBD5E1;
+    }
+
+    /* Quiz Screen */
+    .quiz-meta {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12.5px;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 6px;
+    }
+
+    .progress-track {
+      width: 100%;
+      height: 8px;
+      background: #E2E8F0;
+      border-radius: 10px;
+      overflow: hidden;
+      margin-bottom: 12px;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: var(--primary);
+      width: 1%;
+      border-radius: 10px;
+      transition: width 0.3s ease;
+    }
+
+    .question-box {
+      background: white;
+      border-radius: 20px;
+      padding: 18px 20px;
+      margin-bottom: 14px;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.04);
+      border: 1px solid #F1F5F9;
+    }
+
+    .question-section-tag {
+      font-size: 10.5px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding: 3px 8px;
+      border-radius: 6px;
+      display: inline-block;
+      margin-bottom: 8px;
+    }
+
+    .marks-tag {
+      float: right;
+      font-size: 11px;
+      font-weight: 800;
+      color: #D97706;
+      background: #FEF3C7;
+      padding: 2px 7px;
+      border-radius: 6px;
+    }
+
+    .question-text {
+      font-size: 16px;
+      font-weight: 700;
+      color: #0F172A;
+      line-height: 1.45;
+    }
+
+    .option-btn {
+      background: white;
+      border: 2px solid #E2E8F0;
+      border-radius: 16px;
+      padding: 13px 15px;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 700;
+      color: #334155;
+      transition: all 0.15s;
+      width: 100%;
+      text-align: left;
+    }
+
+    .option-btn:hover:not(:disabled) {
+      border-color: var(--primary);
+      background: #F8FAFC;
+    }
+
+    .option-letter {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: #F1F5F9;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 12.5px;
+      color: #64748B;
+      flex-shrink: 0;
+    }
+
+    .option-btn.correct {
+      background: #ECFDF5 !important;
+      border-color: #10B981 !important;
+      color: #065F46 !important;
+    }
+
+    .option-btn.correct .option-letter {
+      background: #10B981;
+      color: white;
+    }
+
+    .option-btn.wrong {
+      background: #FEF2F2 !important;
+      border-color: #EF4444 !important;
+      color: #991B1B !important;
+    }
+
+    .option-btn.wrong .option-letter {
+      background: #EF4444;
+      color: white;
+    }
+
+    .explanation-card {
+      background: #EEF2FF;
+      border: 1px solid #C7D2FE;
+      border-radius: 16px;
+      padding: 14px;
+      margin-top: 12px;
+      margin-bottom: 14px;
+      animation: fadeIn 0.3s;
+    }
+
+    .explanation-title {
+      font-size: 13px;
+      font-weight: 800;
+      color: var(--primary);
+      margin-bottom: 4px;
+    }
+
+    .explanation-text {
+      font-size: 13px;
+      color: #3730A3;
+      line-height: 1.4;
+    }
+
+    .btn-next {
+      background: var(--primary);
+      color: white;
+      border: none;
+      width: 100%;
+      padding: 14px;
+      border-radius: 16px;
+      font-size: 15px;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(67, 97, 238, 0.3);
+      transition: transform 0.15s;
+    }
+
+    /* Result Screen */
+    .result-stars {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin: 16px 0 10px;
+      font-size: 42px;
+    }
+
+    .result-title {
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--text-main);
+      text-align: center;
+      margin-bottom: 4px;
+    }
+
+    .result-sub {
+      font-size: 13px;
+      color: var(--text-muted);
+      text-align: center;
+      margin-bottom: 18px;
+    }
+
+    .result-grid {
+      background: white;
+      border-radius: 20px;
+      padding: 18px;
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      text-align: center;
+      margin-bottom: 16px;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.04);
+    }
+
+    .res-val {
+      font-size: 18px;
+      font-weight: 800;
+      margin-bottom: 3px;
+    }
+
+    .res-lbl {
+      font-size: 11px;
+      color: var(--text-muted);
+      font-weight: 700;
+    }
+
+    .section-breakdown-box {
+      background: white;
+      border-radius: 18px;
+      padding: 16px;
+      margin-bottom: 16px;
+      border: 1px solid #E2E8F0;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+    }
+
+    .section-breakdown-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 0;
+      border-bottom: 1px dashed #E2E8F0;
+      font-size: 13.5px;
+      font-weight: 800;
+    }
+
+    .section-breakdown-row:last-child {
+      border-bottom: none;
+    }
+
+    .action-row {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .btn-secondary {
+      flex: 1;
+      padding: 12px;
+      border-radius: 14px;
+      background: white;
+      border: 1.5px solid var(--primary);
+      color: var(--primary);
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    /* Modal */
+    .modal-overlay {
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(15, 23, 42, 0.5);
+      backdrop-filter: blur(4px);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      z-index: 100;
+    }
+
+    .modal-overlay.active {
+      display: flex;
+    }
+
+    .modal-card {
+      background: white;
+      border-radius: 24px;
+      padding: 22px;
+      width: 100%;
+      max-width: 320px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="phone-container">
+    <div class="status-bar">
+      <span>9:41</span>
+      <div class="status-icons">
+        <i data-lucide="wifi" size="14"></i>
+        <i data-lucide="battery" size="16"></i>
+      </div>
+    </div>
+
+    <!-- Screen 1: Home Dashboard -->
+    <div id="screen-home" class="app-screen active">
+      <div class="header-user">
+        <div class="user-info">
+          <div class="avatar">🎓</div>
+          <div class="user-text">
+            <h2>Little Scholar! 👋</h2>
+            <p>Class 4 • Full English Medium</p>
+          </div>
+        </div>
+        <div class="star-badge">
+          <span>⭐</span>
+          <span id="home-total-stars">240</span>
+        </div>
+      </div>
+
+      <!-- 100 QUESTIONS GRAND MOCK TEST SPECIAL CARD -->
+      <div class="grand-test-card">
+        <div class="grand-badge">🏆 100 MARKS GRAND MOCK TEST</div>
+        <h3>Full Scholarship Exam<br>100 Questions • 100 Marks</h3>
+        <p class="grand-meta-text">प्रत्येकी १ गुण • २४ विभाग x २५ प्रश्न</p>
+        
+        <div class="grand-grid-sections">
+          <div class="grand-sec-pill"><span>🚩 मराठी व्याकरण</span> <span>25 Qs</span></div>
+          <div class="grand-sec-pill"><span>🔢 Mathematics</span> <span>25 Qs</span></div>
+          <div class="grand-sec-pill"><span>📖 English</span> <span>25 Qs</span></div>
+          <div class="grand-sec-pill"><span>🧠 बुद्धिमत्ता</span> <span>25 Qs</span></div>
+        </div>
+
+        <button class="btn-grand-start" onclick="startGrand100Test()">
+          Start 100 Questions Test (100 Marks) 🚀
+        </button>
+      </div>
+
+      <!-- Select Test Length Strip -->
+      <div style="font-size: 11px; font-weight: 800; color: #64748B; margin-bottom: 6px;">SELECT PRACTICE SIZE:</div>
+      <div class="test-modes-bar">
+        <div class="test-pill" onclick="setQuizSize(25, this)">25 Questions</div>
+        <div class="test-pill" onclick="setQuizSize(50, this)">50 Questions</div>
+        <div class="test-pill active" onclick="setQuizSize(100, this)">100 Questions ⭐</div>
+      </div>
+
+      <!-- 4 Core Subjects -->
+      <h3 class="section-title">Scholarship Exam Subjects</h3>
+      <p class="section-desc">Tap any subject to view all chapters and question banks</p>
+
+      <div id="subject-list">
+        <!-- Rendered via JavaScript -->
+      </div>
+    </div>
+
+    <!-- Screen 2: Chapters Screen -->
+    <div id="screen-chapters" class="app-screen">
+      <div class="top-nav">
+        <button class="btn-back-pill" onclick="navigateTo('screen-home')">
+          <span class="arrow">←</span>
+          <span>मागे (Back)</span>
+        </button>
+        <h2 id="chapter-screen-title" style="margin-left: 4px;">मराठी व्याकरण</h2>
+      </div>
+
+      <div id="chapter-header-banner" class="subject-header-banner">
+        <!-- Dynamic header -->
+      </div>
+
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+        <h4 style="font-size: 15px; font-weight: 800; color: #1E293B;">घटक व सराव संच</h4>
+        <button class="btn-start" style="padding: 6px 12px; font-size: 11px;" onclick="startSubjectAllQuiz()">
+          Test All ⚡
+        </button>
+      </div>
+
+      <div id="chapter-list">
+        <!-- Chapters List -->
+      </div>
+    </div>
+
+    <!-- Screen 3: Quiz Screen with Multi-Section Tabs -->
+    <div id="screen-quiz" class="app-screen">
+      <div class="top-nav" style="justify-content: space-between;">
+        <button class="btn-back-pill" onclick="confirmQuitQuiz()">
+          <span class="arrow">←</span>
+          <span>बाहेर पडा (Back)</span>
+        </button>
+        <h2 id="quiz-title" style="font-size: 14.5px; flex: 1; text-align: center; margin: 0 4px;">100 Questions Test</h2>
+        <button class="btn-back-pill" style="color: #D97706; border-color: #FDE68A; background: #FFFBEB;" onclick="showHint()" title="Hint">
+          <span>💡 हिंट</span>
+        </button>
+      </div>
+
+      <!-- Multi-Section Indicator Chips -->
+      <div id="quiz-section-tabs" class="section-tabs-strip">
+        <!-- Dynamic section chips -->
+      </div>
+
+      <!-- Section Auto-Transition Banner -->
+      <div id="section-transition-notice" class="section-transition-card" style="display: none;">
+        <div>
+          <h4 id="trans-title">🎉 विभाग पूर्ण झाला!</h4>
+          <p id="trans-desc">आता सुरू होत आहे पुढील विभाग</p>
+        </div>
+        <div style="font-size: 24px;">➔</div>
+      </div>
+
+      <div>
+        <div class="quiz-meta">
+          <span id="quiz-question-counter">Question 1 of 100</span>
+          <span id="quiz-current-score" style="color: #06D6A0; font-weight: 800;">Marks: 0 / 100</span>
+        </div>
+        <div class="progress-track">
+          <div id="quiz-progress-fill" class="progress-fill"></div>
+        </div>
+      </div>
+
+      <div class="question-box">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+          <span id="question-sec-badge" class="question-section-tag" style="background: #FFE4E6; color: #BE123C;">
+            विभाग १: मराठी व्याकरण
+          </span>
+          <span class="marks-tag">1 Mark</span>
+        </div>
+        <div id="question-text" class="question-text">प्रश्न लोड होत आहे...</div>
+      </div>
+
+      <div id="options-container">
+        <!-- 4 Option Buttons -->
+      </div>
+
+      <div id="explanation-box" class="explanation-card" style="display: none;">
+        <div class="explanation-title">
+          <span>💡 स्पष्टीकरण (Explanation):</span>
+        </div>
+        <div id="explanation-text" class="explanation-text"></div>
+      </div>
+
+      <button id="btn-next-question" class="btn-next" style="display: none;" onclick="nextQuestion()">
+        Next Question ➔
+      </button>
+    </div>
+
+    <!-- Screen 4: Result Screen with 100 Marks Breakdown -->
+    <div id="screen-result" class="app-screen">
+      <div class="top-nav">
+        <button class="btn-back-pill" onclick="navigateTo('screen-home')">
+          <span class="arrow">←</span>
+          <span>होम स्क्रीन (Home)</span>
+        </button>
+      </div>
+
+      <div class="result-stars" id="result-stars-box">
+        ⭐ ⭐ ⭐
+      </div>
+      <h2 id="result-headline" class="result-title">उत्कृष्ट निकाल! 🎉</h2>
+      <p id="result-submessage" class="result-sub">You completed the 100 Questions Scholarship Test!</p>
+
+      <div class="result-grid">
+        <div>
+          <div id="res-score" class="res-val" style="color: #4361EE;">92/100</div>
+          <div class="res-lbl">Total Marks</div>
+        </div>
+        <div>
+          <div id="res-acc" class="res-val" style="color: #06D6A0;">92%</div>
+          <div class="res-lbl">Percentage</div>
+        </div>
+        <div>
+          <div id="res-stars" class="res-val" style="color: #F59E0B;">+5 ⭐</div>
+          <div class="res-lbl">Merit Stars</div>
+        </div>
+      </div>
+
+      <!-- Section-wise Marksheet Breakdown (25 Marks per section) -->
+      <h4 style="font-size: 14.5px; font-weight: 800; color: #1E293B; margin-bottom: 8px;">
+        गुणपत्रिका (Section-wise Marksheet - 25 Marks Each)
+      </h4>
+      <div id="section-breakdown-list" class="section-breakdown-box">
+        <!-- Section marks breakdown -->
+      </div>
+
+      <div class="action-row">
+        <button class="btn-secondary" onclick="navigateTo('screen-home')">🏠 Home</button>
+        <button class="btn-next" style="flex: 1;" onclick="retryQuiz()">🔄 Try Again</button>
+      </div>
+
+      <h4 style="font-size: 15px; font-weight: 800; color: #1E293B; margin-bottom: 12px;">Answer Review</h4>
+      <div id="review-list">
+        <!-- Review -->
+      </div>
+    </div>
+
+    <!-- Hint Modal -->
+    <div id="hint-modal" class="modal-overlay">
+      <div class="modal-card">
+        <div style="font-size: 36px; margin-bottom: 8px;">💡</div>
+        <h4 style="font-size: 17px; font-weight: 800; margin-bottom: 8px;">Helpful Clue</h4>
+        <p id="hint-modal-text" style="font-size: 13.5px; color: #64748B; margin-bottom: 16px;"></p>
+        <button class="btn-next" onclick="closeHint()">समजले! (Got it!)</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    function playBeep(type) {
+      if (!audioCtx) return;
+      try {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+
+        if (type === 'correct') {
+          osc.frequency.setValueAtTime(523.25, audioCtx.currentTime);
+          osc.frequency.exponentialRampToValueAtTime(783.99, audioCtx.currentTime + 0.15);
+          gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.25);
+          osc.start();
+          osc.stop(audioCtx.currentTime + 0.25);
+        } else if (type === 'wrong') {
+          osc.frequency.setValueAtTime(300, audioCtx.currentTime);
+          osc.frequency.setValueAtTime(200, audioCtx.currentTime + 0.1);
+          gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.25);
+          osc.start();
+          osc.stop(audioCtx.currentTime + 0.25);
+        } else if (type === 'fanfare') {
+          osc.frequency.setValueAtTime(440, audioCtx.currentTime);
+          osc.frequency.setValueAtTime(554.37, audioCtx.currentTime + 0.1);
+          osc.frequency.setValueAtTime(659.25, audioCtx.currentTime + 0.2);
+          gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.4);
+          osc.start();
+          osc.stop(audioCtx.currentTime + 0.4);
+        }
+      } catch (e) {}
+    }
+
+    let selectedQuizSize = 100;
+    function setQuizSize(size, el) {
+      selectedQuizSize = size;
+      document.querySelectorAll('.test-pill').forEach(p => p.classList.remove('active'));
+      el.classList.add('active');
+    }
+
+    // Dynamic Generator for deep 25 questions per subject
+    const marathiSynonyms = [
+      { q: "'आकाश' या शब्दाचा समानार्थी शब्द कोणता?", a: 'गगन', opts: ['गगन', 'धरा', 'वारु', 'पावक'], exp: 'आकाश म्हणजे गगन, नभ, आभाळ.' },
+      { q: "'पृथ्वी' या शब्दाचा समानार्थी शब्द ओळखा:", a: 'वसुंधरा', opts: ['वसुंधरा', 'अंबर', 'सरिता', 'पवन'], exp: 'पृथ्वी म्हणजे वसुंधरा, धरणी, भूमी.' },
+      { q: "'वारा' या शब्दाचा समानार्थी शब्द कोणता?", a: 'पवन', opts: ['पवन', 'वारु', 'पावक', 'पाषाण'], exp: 'वारा म्हणजे पवन, अनिल, समीर.' },
+      { q: "'घोडा' या शब्दाचा समानार्थी शब्द कोणता?", a: 'अश्व', opts: ['अश्व', 'गज', 'मर्कट', 'शार्दूल'], exp: 'घोडा म्हणजे अश्व, हय, वारु.' },
+      { q: "'पाणी' या शब्दाचा समानार्थी शब्द कोणता?", a: 'जल', opts: ['जल', 'अग्नी', 'भूमी', 'अनिल'], exp: 'पाणी म्हणजे जल, नीर, उदक, पय.' },
+      { q: "'आई' या शब्दाचा समानार्थी नसलेला शब्द कोणता?", a: 'भगिनी', opts: ['माता', 'जननी', 'माऊली', 'भगिनी'], exp: 'भगिनी म्हणजे बहीण.' },
+      { q: "'सूर्य' या शब्दाचा समानार्थी नसलेला शब्द कोणता?", a: 'शशी', opts: ['भास्कर', 'रवी', 'दिनकर', 'शशी'], exp: 'शशी म्हणजे चंद्र.' },
+      { q: "'जंगल' या शब्दाचा समानार्थी शब्द कोणता?", a: 'अरण्य', opts: ['अरण्य', 'शिवार', 'वावर', 'उद्यान'], exp: 'जंगल म्हणजे अरण्य, वन, रान, कानन.' },
+      { q: "'घर' या शब्दाचा समानार्थी शब्द कोणता?", a: 'सदन', opts: ['सदन', 'नगर', 'ग्राम', 'पथ'], exp: 'घर म्हणजे सदन, गृह, निवास, धाम.' },
+      { q: "'डोळा' या शब्दाचा समानार्थी शब्द ओळखा:", a: 'नयन', opts: ['नयन', 'कर्ण', 'हस्त', 'पद'], exp: 'डोळा म्हणजे नयन, चक्षू, नेत्र, लोचन.' }
+    ];
+
+    const marathiAntonyms = [
+      { q: "'उपकार' या शब्दाचा अचूक विरुद्धार्थी शब्द ओळखा:", a: 'अपकार', opts: ['सत्कार', 'अपकार', 'परोपकार', 'आभार'], exp: 'उपकार x अपकार.' },
+      { q: "'अमृत' या शब्दाचा विरुद्धार्थी शब्द कोणता?", a: 'विष', opts: ['विष', 'सुधा', 'पीयूष', 'रस'], exp: 'अमृत x विष.' },
+      { q: "'सुलभ' या शब्दाचा विरुद्धार्थी शब्द कोणता?", a: 'दुर्लभ', opts: ['दुर्लभ', 'कठीण', 'अवघड', 'अशक्य'], exp: 'सुलभ x दुर्लभ.' },
+      { q: "'श्रीमंत' या शब्दाचा विरुद्धार्थी शब्द ओळखा:", a: 'रंक', opts: ['रंक', 'सावकार', 'धनी', 'शूर'], exp: 'श्रीमंत x रंक/गरीब.' },
+      { q: "'सकाळ' या शब्दाचा विरुद्धार्थी शब्द कोणता?", a: 'संध्याकाळ', opts: ['संध्याकाळ', 'दुपार', 'पहाट', 'रात्र'], exp: 'सकाळ x संध्याकाळ.' },
+      { q: "'जय' या शब्दाचा विरुद्धार्थी शब्द कोणता?", a: 'पराजय', opts: ['पराजय', 'विजय', 'अजय', 'संजय'], exp: 'जय x पराजय.' },
+      { q: "'आदर' या शब्दाचा अचूक विरुद्धार्थी शब्द ओळखा:", a: 'अनादर', opts: ['अनादर', 'सत्कार', 'सन्मान', 'अपमान'], exp: 'आदर x अनादर.' },
+      { q: "'प्रकाश्य/उजेड' या शब्दाचा विरुद्धार्थी शब्द कोणता?", a: 'अंधार', opts: ['अंधार', 'रात्र', 'काळोख', 'सावली'], exp: 'उजेड x अंधार.' }
+    ];
+
+    const marathiGrammarMisc = [
+      { q: "'घोडा' या शब्दाचे योग्य अनेकवचन कोणते?", a: 'घोडे', opts: ['घोडे', 'घोड्या', 'घोड्यांना', 'घोडी'], exp: 'एक घोडा, अनेक घोडे.' },
+      { q: "'झाड' या शब्दाचे लिंग कोणते आहे?", a: 'नपुंसकलिंग', opts: ['पुल्लिंग', 'स्त्रीलिंग', 'नपुंसकलिंग', 'उभयलिंग'], exp: 'ते झाड = नपुंसकलिंग.' },
+      { q: "'कवी' या शब्दाचे स्त्रीलिंगी रूप कोणते?", a: 'कवयित्री', opts: ['कविण', 'कवयित्री', 'कवयित्रीण', 'कवीस्त्री'], exp: 'कवी चे स्त्रीलिंग कवयित्री.' },
+      { q: "'पुस्तक' या शब्दाचे अनेकवचन काय होईल?", a: 'पुस्तके', opts: ['पुस्तके', 'पुस्तका', 'पुस्तकी', 'पुस्तकांचा'], exp: 'एक पुस्तक, अनेक पुस्तके.' },
+      { q: "'बैल' या शब्दाचे स्त्रीलिंगी रूप कोणते?", a: 'गाय', opts: ['गाय', 'म्हैस', 'शेळी', 'वाघीण'], exp: 'बैल x गाय.' },
+      { q: "'डोळे उघडणे' या वाक्प्रचाराचा अचूक अर्थ काय?", a: 'चूक लक्षात येणे', opts: ['झोपेतून उठणे', 'चूक लक्षात येणे', 'डोळे चोळणे', 'रागावणे'], exp: 'डोळे उघडणे = चूक समजणे.' },
+      { q: "म्हण पूर्ण करा: 'नाव मोठे, लक्षण ______'", a: 'खोटे', opts: ['चांगले', 'खोटे', 'वाईट', 'मोठे'], exp: 'नाव मोठे लक्षण खोटे.' },
+      { q: "'हातभार लावणे' या वाक्प्रचाराचा अर्थ सांगा:", a: 'मदत करणे', opts: ['मदत करणे', 'हात वर करणे', 'टाळी देणे', 'ओझे उचलणे'], exp: 'हातभार लावणे = मदत करणे.' },
+      { q: "'गंगा ही पवित्र नदी आहे.' या वाक्यातील विशेषण कोणते?", a: 'पवित्र', opts: ['गंगा', 'पवित्र', 'नदी', 'आहे'], exp: 'पवित्र हे विशेषण आहे.' },
+      { q: "'आम्ही दररोज अभ्यास करतो.' या वाक्यातील सर्वनाम कोणते?", a: 'आम्ही', opts: ['आम्ही', 'दररोज', 'अभ्यास', 'करतो'], exp: 'आम्ही हे सर्वनाम आहे.' }
+    ];
+
+    function getMarathi25Questions() {
+      const all = [...marathiSynonyms, ...marathiAntonyms, ...marathiGrammarMisc];
+      const selected = all.sort(() => 0.5 - Math.random()).slice(0, 25);
+      // Map to standard schema
+      return selected.map((item, idx) => ({
+        q: item.q,
+        options: item.opts,
+        ans: item.opts.indexOf(item.a),
+        exp: item.exp,
+        hint: 'काळजीपूर्वक विचार करा.',
+        sectionId: 'marathi',
+        sectionTitle: '१. मराठी व्याकरण व भाषा',
+        badgeBg: '#FFE4E6',
+        badgeText: '#BE123C'
+      }));
+    }
+
+    function getMaths25Questions() {
+      const list = [];
+      // Static core
+      list.push(
+        { q: 'What is the place value of 7 in 47,825?', opts: ['70', '700', '7,000', '70,000'], a: '7,000', exp: '7 is at thousands place: 7,000.' },
+        { q: 'Which is the largest 4-digit number formed using 9, 0, 4, 7?', opts: ['9740', '9704', '9470', '9074'], a: '9740', exp: 'Descending: 9740.' },
+        { q: 'Roman numeral for 44 is:', opts: ['XXXXIV', 'XLIV', 'LXVI', 'LIV'], a: 'XLIV', exp: '40=XL, 4=IV -> XLIV.' },
+        { q: 'Face value of 8 in 38,452 is:', opts: ['8', '80', '8,000', '80,000'], a: '8', exp: 'Face value is 8 itself.' },
+        { q: 'Write in figures: "Seventy-five thousand and twenty-nine":', opts: ['75,290', '75,029', '75,209', '70,529'], a: '75,029', exp: '75,029.' },
+        { q: 'Which number is 1,000 less than 54,678?', opts: ['53,678', '54,578', '54,668', '44,678'], a: '53,678', exp: '54,678 - 1,000 = 53,678.' },
+        { q: 'If 1 box has 24 chocolates, how many in 15 boxes?', opts: ['340', '360', '380', '400'], a: '360', exp: '24 × 15 = 360.' },
+        { q: 'Divide 450 by 9. Quotient is:', opts: ['40', '45', '50', '55'], a: '50', exp: '450 ÷ 9 = 50.' },
+        { q: 'A fruit seller had 1,250 apples. He sold 875. How many left?', opts: ['375', '385', '425', '475'], a: '375', exp: '1,250 - 875 = 375.' },
+        { q: 'What fraction is equivalent to 2/3?', opts: ['4/9', '6/9', '4/5', '6/8'], a: '6/9', exp: '(2×3)/(3×3) = 6/9.' },
+        { q: 'Solve: 3/8 + 2/8 = ?', opts: ['5/16', '5/8', '6/8', '1/8'], a: '5/8', exp: '3+2 = 5, answer is 5/8.' },
+        { q: 'Minutes in 3 hours and 25 minutes:', opts: ['180 min', '205 min', '195 min', '225 min'], a: '205 min', exp: '3×60 + 25 = 205.' },
+        { q: 'Paise in ₹15.75:', opts: ['157.5', '1,575', '15,750', '157'], a: '1,575', exp: '15.75 × 100 = 1575 paise.' },
+        { q: 'A square has side 8 cm. What is its perimeter?', opts: ['24 cm', '32 cm', '64 cm', '16 cm'], a: '32 cm', exp: 'Perimeter = 4 × 8 = 32 cm.' },
+        { q: 'How many sides does a Pentagon have?', opts: ['4', '5', '6', '8'], a: '5', exp: 'Pentagon has 5 sides.' }
+      );
+
+      // Dynamically generate the remaining 10 questions
+      while (list.length < 25) {
+        const a = Math.floor(Math.random() * 400) + 100;
+        const b = Math.floor(Math.random() * 400) + 50;
+        const op = Math.random() > 0.5 ? '+' : '×';
+        if (op === '+') {
+          const ans = a + b;
+          const opts = [ans, ans + 10, ans - 10, ans + 100].sort(() => 0.5 - Math.random());
+          list.push({ q: `Solve: What is ${a} + ${b}?`, opts: opts.map(String), a: String(ans), exp: `${a} + ${b} = ${ans}.` });
+        } else {
+          const m1 = Math.floor(Math.random() * 12) + 3;
+          const m2 = Math.floor(Math.random() * 12) + 3;
+          const ans = m1 * m2;
+          const opts = [ans, ans + m1, ans - m2, ans + 5].sort(() => 0.5 - Math.random());
+          list.push({ q: `Calculate: ${m1} × ${m2} = ?`, opts: opts.map(String), a: String(ans), exp: `${m1} × ${m2} = ${ans}.` });
+        }
+      }
+
+      return list.map(item => ({
+        q: item.q,
+        options: item.opts,
+        ans: item.opts.indexOf(item.a),
+        exp: item.exp,
+        hint: 'Apply basic math rules.',
+        sectionId: 'maths',
+        sectionTitle: '२. Mathematics (गणित)',
+        badgeBg: '#DBEAFE',
+        badgeText: '#1D4ED8'
+      }));
+    }
+
+    function getEnglish25Questions() {
+      const list = [
+        { q: 'Choose collective noun: "A ______ of wolves walked through the forest."', opts: ['herd', 'flock', 'pack', 'swarm'], a: 'pack', exp: 'A group of wolves is a pack.' },
+        { q: 'Select pronoun: "Rohan gave his toy to me."', opts: ['Rohan', 'toy', 'gave', 'me'], a: 'me', exp: '"me" is an object pronoun.' },
+        { q: 'Fill article: "She bought ______ honest boy a reward."', opts: ['a', 'an', 'the', 'none'], a: 'an', exp: 'Silent h makes vowel sound.' },
+        { q: 'Which word is an Abstract Noun?', opts: ['Bravery', 'Soldier', 'Sword', 'Shield'], a: 'Bravery', exp: 'Bravery is a feeling/quality.' },
+        { q: 'Opposite (antonym) of "Courageous":', opts: ['Brave', 'Heroic', 'Cowardly', 'Strong'], a: 'Cowardly', exp: 'Courageous x Cowardly.' },
+        { q: 'Synonym for "Enormous":', opts: ['Tiny', 'Huge', 'Quiet', 'Soft'], a: 'Huge', exp: 'Enormous means huge.' },
+        { q: 'Find rhyming word for "Flight":', opts: ['Plate', 'Night', 'Fleet', 'Flock'], a: 'Night', exp: 'Flight rhymes with Night.' },
+        { q: 'A person who bakes bread and cakes:', opts: ['Cobbler', 'Baker', 'Florist', 'Tailor'], a: 'Baker', exp: 'Baker bakes bread.' },
+        { q: 'Complete: "The cat jumped ______ the fence."', opts: ['over', 'under', 'between', 'inside'], a: 'over', exp: 'Jump over an obstacle.' },
+        { q: 'Which sentence is in Future Tense?', opts: ['He walks.', 'He walked.', 'He will walk.', 'He is walking.'], a: 'He will walk.', exp: '"will walk" indicates future.' },
+        { q: 'Plural of "Child":', opts: ['Childs', 'Children', 'Childrens', 'Childies'], a: 'Children', exp: 'Child -> Children.' },
+        { q: 'Opposite of "Ancient":', opts: ['Old', 'Modern', 'Historic', 'Past'], a: 'Modern', exp: 'Ancient x Modern.' },
+        { q: 'Choose the correctly spelt word:', opts: ['Beautiful', 'Beautifull', 'Beatiful', 'Beutiful'], a: 'Beautiful', exp: 'Correct: Beautiful.' },
+        { q: 'Young one of a Kangaroo is called:', opts: ['Calf', 'Joey', 'Cub', 'Fawn'], a: 'Joey', exp: 'Baby kangaroo is a Joey.' },
+        { q: 'Home of a Lion is called:', opts: ['Den', 'Kennel', 'Stable', 'Shed'], a: 'Den', exp: 'A lion lives in a den.' },
+        { q: 'Synonym for "Silent":', opts: ['Noisy', 'Quiet', 'Loud', 'Harsh'], a: 'Quiet', exp: 'Silent means quiet.' },
+        { q: 'Opposite of "Arrival":', opts: ['Departure', 'Coming', 'Exit', 'Return'], a: 'Departure', exp: 'Arrival x Departure.' },
+        { q: 'Identify the verb: "The birds fly in the sky."', opts: ['birds', 'fly', 'in', 'sky'], a: 'fly', exp: 'fly is the action verb.' },
+        { q: 'Identify the adjective: "She has a red dress."', opts: ['She', 'has', 'red', 'dress'], a: 'red', exp: 'red describes the dress.' },
+        { q: 'Plural of "Foot":', opts: ['Foots', 'Feet', 'Feets', 'Footies'], a: 'Feet', exp: 'Foot -> Feet.' },
+        { q: 'Female of "Prince":', opts: ['Queen', 'Princess', 'Lady', 'Duchess'], a: 'Princess', exp: 'Prince x Princess.' },
+        { q: 'A place where books are kept:', opts: ['Library', 'Bakery', 'Museum', 'Laboratory'], a: 'Library', exp: 'Library keeps books.' },
+        { q: 'Past tense of "Teach":', opts: ['Teached', 'Taught', 'Thought', 'Taughted'], a: 'Taught', exp: 'Teach -> Taught.' },
+        { q: 'Which animal neighs?', opts: ['Donkey', 'Horse', 'Elephant', 'Camel'], a: 'Horse', exp: 'A horse neighs.' },
+        { q: 'Opposite of "Friend":', opts: ['Enemy', 'Partner', 'Companion', 'Buddy'], a: 'Enemy', exp: 'Friend x Enemy.' }
+      ];
+
+      return list.map(item => ({
+        q: item.q,
+        options: item.opts,
+        ans: item.opts.indexOf(item.a),
+        exp: item.exp,
+        hint: 'Recall English grammar & vocabulary.',
+        sectionId: 'english',
+        sectionTitle: '३. English Language',
+        badgeBg: '#FEE2E2',
+        badgeText: '#B91C1C'
+      }));
+    }
+
+    function getIntelligence25Questions() {
+      const list = [
+        { q: 'Odd one out: Apple, Mango, Carrot, Banana', opts: ['Apple', 'Mango', 'Carrot', 'Banana'], a: 'Carrot', exp: 'Carrot is vegetable; rest are fruits.' },
+        { q: 'Odd number: 12, 18, 24, 27, 30', opts: ['18', '24', '27', '30'], a: '27', exp: '27 is odd; rest are even.' },
+        { q: 'Odd organ: Eye, Nose, Ear, Liver', opts: ['Eye', 'Nose', 'Ear', 'Liver'], a: 'Liver', exp: 'Liver is internal organ.' },
+        { q: 'Odd shape: Square, Triangle, Circle, Cube', opts: ['Square', 'Triangle', 'Circle', 'Cube'], a: 'Cube', exp: 'Cube is 3D.' },
+        { q: 'Next in sequence: 4, 8, 12, 16, ?', opts: ['18', '20', '22', '24'], a: '20', exp: 'Multiples of 4: 16+4=20.' },
+        { q: 'If CAT is coded as DBU, how is DOG coded?', opts: ['EPH', 'ENH', 'FPH', 'DPH'], a: 'EPH', exp: 'Shift +1: DOG -> EPH.' },
+        { q: 'Complete sequence: 100, 90, 80, 70, ?', opts: ['60', '50', '65', '75'], a: '60', exp: 'Subtract 10: 60.' },
+        { q: 'Reverse alphabet pattern: Z, Y, X, W, ?', opts: ['V', 'U', 'T', 'S'], a: 'V', exp: 'Reverse: V.' },
+        { q: 'Bird : Nest :: Bee : ?', opts: ['Hive', 'Den', 'Burrow', 'Stable'], a: 'Hive', exp: 'Bee lives in hive.' },
+        { q: 'Dog : Bark :: Lion : ?', opts: ['Roar', 'Moo', 'Neigh', 'Bleat'], a: 'Roar', exp: 'Lion roars.' },
+        { q: 'Doctor : Hospital :: Teacher : ?', opts: ['School', 'Bank', 'Factory', 'Court'], a: 'School', exp: 'Teacher works in school.' },
+        { q: 'Book : Pages :: Clock : ?', opts: ['Hands/Digits', 'Wall', 'Time', 'Bell'], a: 'Hands/Digits', exp: 'Parts of clock.' },
+        { q: 'Find odd word: Red, Blue, Heavy, Yellow', opts: ['Red', 'Blue', 'Heavy', 'Yellow'], a: 'Heavy', exp: 'Heavy is not a color.' },
+        { q: 'Next in series: 5, 10, 15, 20, ?', opts: ['22', '25', '30', '35'], a: '25', exp: '+5 pattern: 25.' },
+        { q: 'If PEN is 16-5-14, what is CUP?', opts: ['3-21-16', '3-20-16', '4-21-16', '3-21-15'], a: '3-21-16', exp: 'Alphabet positions: C=3, U=21, P=16.' },
+        { q: 'Odd day: Monday, Friday, Sunday, January', opts: ['Monday', 'Friday', 'Sunday', 'January'], a: 'January', exp: 'January is a month.' },
+        { q: 'Sun : Day :: Moon : ?', opts: ['Night', 'Sky', 'Morning', 'Star'], a: 'Night', exp: 'Moon shines at night.' },
+        { q: 'Next in series: 2, 4, 8, 16, ?', opts: ['24', '30', '32', '36'], a: '32', exp: 'Double each number: 16 × 2 = 32.' },
+        { q: 'If North is opposite to South, East is opposite to:', opts: ['West', 'North', 'South-East', 'Up'], a: 'West', exp: 'East is opposite to West.' },
+        { q: 'A is sister of B. B is brother of C. What is A to C?', opts: ['Sister', 'Mother', 'Aunt', 'Cousin'], a: 'Sister', exp: 'A is sister of C.' },
+        { q: 'Odd vehicle: Car, Bus, Train, Helicopter', opts: ['Car', 'Bus', 'Train', 'Helicopter'], a: 'Helicopter', exp: 'Air vehicle vs land vehicles.' },
+        { q: 'Pattern: 11, 22, 33, 44, ?', opts: ['50', '55', '66', '45'], a: '55', exp: 'Repeated digits: 55.' },
+        { q: 'Pen : Paper :: Chalk : ?', opts: ['Blackboard', 'Table', 'Book', 'Wall'], a: 'Blackboard', exp: 'Write with chalk on blackboard.' },
+        { q: 'Cow : Calf :: Cat : ?', opts: ['Kitten', 'Puppy', 'Cub', 'Lamb'], a: 'Kitten', exp: 'Baby cat is kitten.' },
+        { q: 'Find odd pair: Day-Night, Big-Small, Up-Down, Fast-Quick', opts: ['Day-Night', 'Big-Small', 'Up-Down', 'Fast-Quick'], a: 'Fast-Quick', exp: 'Fast-Quick are synonyms; rest are antonyms.' }
+      ];
+
+      return list.map(item => ({
+        q: item.q,
+        options: item.opts,
+        ans: item.opts.indexOf(item.a),
+        exp: item.exp,
+        hint: 'Think logically and observe the pattern.',
+        sectionId: 'intelligence',
+        sectionTitle: '४. बुद्धिमत्ता चाचणी',
+        badgeBg: '#F3E8FF',
+        badgeText: '#7E22CE'
+      }));
+    }
+
+    // State Variables
+    let currentSubject = null;
+    let activeQuestions = [];
+    let currentQIndex = 0;
+    let currentScore = 0;
+    let userAnswers = [];
+    let hasAnswered = false;
+    let totalStars = 240;
+    let testSections = [];
+    let currentActiveSectionId = '';
+
+    function navigateTo(screenId) {
+      document.querySelectorAll('.app-screen').forEach(s => s.classList.remove('active'));
+      document.getElementById(screenId).classList.add('active');
+    }
+
+    function renderHome() {
+      const list = document.getElementById('subject-list');
+      const subjects = [
+        { id: 'marathi', title: 'मराठी व्याकरण व भाषा', subtitle: 'समानार्थी, विरुद्धार्थी, लिंग-वचन, वाक्प्रचार', emoji: '🚩', color: 'linear-gradient(135deg, #E63946 0%, #F4A261 100%)', count: '25 Qs per test' },
+        { id: 'maths', title: 'Mathematics (गणित)', subtitle: 'Numbers, Operations, Fractions & Geometry', emoji: '🔢', color: 'linear-gradient(135deg, #3A86FF 0%, #00B4D8 100%)', count: '25 Qs per test' },
+        { id: 'english', title: 'English Language', subtitle: 'Grammar, Vocabulary & Comprehension', emoji: '📖', color: 'linear-gradient(135deg, #FF5964 0%, #FF9E00 100%)', count: '25 Qs per test' },
+        { id: 'intelligence', title: 'Intelligence Test (बुद्धिमत्ता)', subtitle: 'Mental Ability, Reasoning & Patterns', emoji: '🧠', color: 'linear-gradient(135deg, #7209B7 0%, #B5179E 100%)', count: '25 Qs per test' }
+      ];
+
+      list.innerHTML = subjects.map(sub => `
+        <div class="subject-card" onclick="openSubject('${sub.id}')">
+          <div class="subject-icon-box" style="background: ${sub.color};">
+            <span>${sub.emoji}</span>
+          </div>
+          <div class="subject-details" style="flex: 1;">
+            <h4>${sub.title}</h4>
+            <p>${sub.subtitle}</p>
+            <div class="subject-meta">
+              <span>📚 4 Chapters</span>
+              <span style="color: #4361EE; font-weight: 800;">⚡ ${sub.count}</span>
+            </div>
+          </div>
+          <div style="color: #CBD5E1; font-weight: bold;">➔</div>
+        </div>
+      `).join('');
+    }
+
+    function openSubject(subId) {
+      if (subId === 'marathi') {
+        startQuiz('मराठी व्याकरण सराव (25 प्रश्न)', getMarathi25Questions());
+      } else if (subId === 'maths') {
+        startQuiz('Mathematics Test (25 Qs)', getMaths25Questions());
+      } else if (subId === 'english') {
+        startQuiz('English Language Test (25 Qs)', getEnglish25Questions());
+      } else {
+        startQuiz('बुद्धिमत्ता चाचणी (25 प्रश्न)', getIntelligence25Questions());
+      }
+    }
+
+    // 100 QUESTIONS GRAND MOCK TEST
+    function startGrand100Test() {
+      const qMarathi = getMarathi25Questions();
+      const qMaths = getMaths25Questions();
+      const qEnglish = getEnglish25Questions();
+      const qIntel = getIntelligence25Questions();
+
+      testSections = [
+        { id: 'marathi', title: '१. मराठी व्याकरण', emoji: '🚩', count: 25 },
+        { id: 'maths', title: '२. Mathematics', emoji: '🔢', count: 25 },
+        { id: 'english', title: '३. English', emoji: '📖', count: 25 },
+        { id: 'intelligence', title: '४. बुद्धिमत्ता', emoji: '🧠', count: 25 }
+      ];
+
+      const full100 = [...qMarathi, ...qMaths, ...qEnglish, ...qIntel];
+      startQuiz('100 Questions Grand Mock Test (100 Marks)', full100);
+    }
+
+    function startQuiz(title, questions) {
+      activeQuestions = questions;
+      currentQIndex = 0;
+      currentScore = 0;
+      userAnswers = [];
+      document.getElementById('quiz-title').innerText = title;
+      currentActiveSectionId = activeQuestions[0].sectionId;
+
+      if (activeQuestions.length === 100) {
+        testSections = [
+          { id: 'marathi', title: '१. मराठी (25)', emoji: '🚩', count: 25 },
+          { id: 'maths', title: '२. Maths (25)', emoji: '🔢', count: 25 },
+          { id: 'english', title: '३. English (25)', emoji: '📖', count: 25 },
+          { id: 'intelligence', title: '४. बुद्धिमत्ता (25)', emoji: '🧠', count: 25 }
+        ];
+      }
+
+      renderSectionTabs();
+      renderQuestion();
+      navigateTo('screen-quiz');
+    }
+
+    function renderSectionTabs() {
+      const container = document.getElementById('quiz-section-tabs');
+      if (testSections.length <= 1) {
+        container.style.display = 'none';
+        return;
+      }
+      container.style.display = 'flex';
+      container.innerHTML = testSections.map(sec => `
+        <div id="tab-${sec.id}" class="section-tab-chip ${sec.id === currentActiveSectionId ? 'active' : ''}">
+          <span>${sec.emoji}</span>
+          <span>${sec.title}</span>
+        </div>
+      `).join('');
+    }
+
+    function renderQuestion() {
+      hasAnswered = false;
+      const q = activeQuestions[currentQIndex];
+
+      // Detect if we transitioned to a new section!
+      if (q.sectionId && q.sectionId !== currentActiveSectionId) {
+        currentActiveSectionId = q.sectionId;
+        playBeep('fanfare');
+
+        document.querySelectorAll('.section-tab-chip').forEach(t => t.classList.remove('active'));
+        const activeTab = document.getElementById(`tab-${q.sectionId}`);
+        if (activeTab) activeTab.classList.add('active');
+
+        const notice = document.getElementById('section-transition-notice');
+        document.getElementById('trans-title').innerText = `✨ पुढील विभाग सुरू झाला! (Next Section)`;
+        document.getElementById('trans-desc').innerText = `सध्याचा विभाग: ${q.sectionTitle}`;
+        notice.style.display = 'flex';
+        setTimeout(() => {
+          notice.style.display = 'none';
+        }, 3200);
+      }
+
+      document.getElementById('quiz-question-counter').innerText = `Question ${currentQIndex + 1} of ${activeQuestions.length}`;
+      document.getElementById('quiz-current-score').innerText = `Marks: ${currentScore} / ${activeQuestions.length}`;
+      document.getElementById('quiz-progress-fill').style.width = `${((currentQIndex + 1) / activeQuestions.length) * 100}%`;
+
+      const secBadge = document.getElementById('question-sec-badge');
+      secBadge.innerText = q.sectionTitle || 'Scholarship Question';
+      secBadge.style.background = q.badgeBg || '#EEF2FF';
+      secBadge.style.color = q.badgeText || '#4361EE';
+
+      document.getElementById('question-text').innerText = q.q;
+
+      const letters = ['A', 'B', 'C', 'D'];
+      const container = document.getElementById('options-container');
+      container.innerHTML = q.options.map((opt, i) => `
+        <button class="option-btn" id="opt-btn-${i}" onclick="selectOption(${i})">
+          <div class="option-letter">${letters[i]}</div>
+          <span style="flex: 1;">${opt}</span>
+        </button>
+      `).join('');
+
+      document.getElementById('explanation-box').style.display = 'none';
+      document.getElementById('btn-next-question').style.display = 'none';
+    }
+
+    function selectOption(index) {
+      if (hasAnswered) return;
+      hasAnswered = true;
+      const q = activeQuestions[currentQIndex];
+      const isCorrect = index === q.ans;
+
+      if (isCorrect) {
+        currentScore++;
+        playBeep('correct');
+      } else {
+        playBeep('wrong');
+      }
+
+      userAnswers.push({
+        question: q.q,
+        selected: q.options[index],
+        correct: q.options[q.ans],
+        isCorrect: isCorrect,
+        sectionId: q.sectionId,
+        sectionTitle: q.sectionTitle
+      });
+
+      document.getElementById('quiz-current-score').innerText = `Marks: ${currentScore} / ${activeQuestions.length}`;
+
+      const btns = document.querySelectorAll('.option-btn');
+      btns.forEach((btn, i) => {
+        btn.disabled = true;
+        if (i === q.ans) {
+          btn.classList.add('correct');
+        } else if (i === index) {
+          btn.classList.add('wrong');
+        }
+      });
+
+      const expBox = document.getElementById('explanation-box');
+      document.getElementById('explanation-text').innerText = q.exp;
+      expBox.style.display = 'block';
+
+      const nextBtn = document.getElementById('btn-next-question');
+      if (currentQIndex < activeQuestions.length - 1) {
+        const nextQ = activeQuestions[currentQIndex + 1];
+        if (nextQ.sectionId !== q.sectionId) {
+          nextBtn.innerText = `विभाग पूर्ण! पुढील विभाग सुरू करा (${nextQ.sectionTitle}) ➔`;
+        } else {
+          nextBtn.innerText = 'Next Question ➔';
+        }
+      } else {
+        nextBtn.innerText = 'Finish & View Complete 100 Marks Marksheet 🏆';
+      }
+      nextBtn.style.display = 'block';
+    }
+
+    function nextQuestion() {
+      if (currentQIndex < activeQuestions.length - 1) {
+        currentQIndex++;
+        renderQuestion();
+      } else {
+        showResults();
+      }
+    }
+
+    function showResults() {
+      const total = activeQuestions.length;
+      const pct = Math.round((currentScore / total) * 100);
+      let stars = 1;
+      let title = 'सराव चालू ठेवा! 👍';
+      let sub = 'Keep practicing to master all 4 subjects!';
+
+      if (pct >= 85) {
+        stars = 3;
+        title = 'शिष्यवृत्ती मेरिट सुपरस्टार! 🌟';
+        sub = `अप्रतिम निकाल! १०० पैकी ${currentScore} गुण मिळवले आहेत!`;
+        try {
+          confetti({ particleCount: 160, spread: 80, origin: { y: 0.6 } });
+        } catch(e) {}
+      } else if (pct >= 60) {
+        stars = 2;
+        title = 'छान कामगिरी! 👏';
+        sub = `चांगला अभ्यास झाला आहे, १०० पैकी ${currentScore} गुण मिळाले!`;
+      }
+
+      totalStars += stars;
+      document.getElementById('home-total-stars').innerText = totalStars;
+
+      document.getElementById('result-stars-box').innerHTML = '⭐ '.repeat(stars) + '<span style="opacity: 0.3;">⭐ </span>'.repeat(3 - stars);
+      document.getElementById('result-headline').innerText = title;
+      document.getElementById('result-submessage').innerText = sub;
+      document.getElementById('res-score').innerText = `${currentScore} / ${total}`;
+      document.getElementById('res-acc').innerText = `${pct}%`;
+      document.getElementById('res-stars').innerText = `+${stars} ⭐`;
+
+      // Section-wise Breakdown (25 Marks per section)
+      const secSummary = {};
+      userAnswers.forEach(a => {
+        const sName = a.sectionTitle || 'General';
+        if (!secSummary[sName]) secSummary[sName] = { total: 0, correct: 0 };
+        secSummary[sName].total++;
+        if (a.isCorrect) secSummary[sName].correct++;
+      });
+
+      const breakdownBox = document.getElementById('section-breakdown-list');
+      breakdownBox.innerHTML = Object.keys(secSummary).map(sName => {
+        const s = secSummary[sName];
+        const sPct = Math.round((s.correct / s.total) * 100);
+        return `
+          <div class="section-breakdown-row">
+            <span>${sName}</span>
+            <span style="color: ${sPct >= 70 ? '#10B981' : '#F59E0B'}; font-size: 14px;">
+              ${s.correct} / ${s.total} Marks (${sPct}%)
+            </span>
+          </div>
+        `;
+      }).join('');
+
+      // Answer Review List
+      const reviewList = document.getElementById('review-list');
+      reviewList.innerHTML = userAnswers.map((item, i) => `
+        <div style="background: white; border-radius: 14px; padding: 12px; margin-bottom: 10px; border: 1px solid #E2E8F0;">
+          <div style="font-size: 11px; font-weight: 800; color: #64748B; margin-bottom: 2px;">${item.sectionTitle || ''} • 1 Mark</div>
+          <p style="font-size: 13px; font-weight: 700; color: #1E293B; margin-bottom: 4px;">${i + 1}. ${item.question}</p>
+          <div style="font-size: 12px; display: flex; gap: 8px;">
+            <span style="color: ${item.isCorrect ? '#10B981' : '#EF4444'}; font-weight: 600;">
+              ${item.isCorrect ? '✓ बरोबर (+1 Mark)' : '✗ तुमचे उत्तर: ' + item.selected}
+            </span>
+            ${!item.isCorrect ? `<span style="color: #10B981; font-weight: 600;">(अचूक उत्तर: ${item.correct})</span>` : ''}
+          </div>
+        </div>
+      `).join('');
+
+      navigateTo('screen-result');
+    }
+
+    function retryQuiz() {
+      currentQIndex = 0;
+      currentScore = 0;
+      userAnswers = [];
+      currentActiveSectionId = activeQuestions[0].sectionId;
+      renderSectionTabs();
+      renderQuestion();
+      navigateTo('screen-quiz');
+    }
+
+    function confirmQuitQuiz() {
+      if (confirm('Do you want to leave this quiz? Your progress will be lost.')) {
+        navigateTo('screen-home');
+      }
+    }
+
+    function showHint() {
+      const q = activeQuestions[currentQIndex];
+      document.getElementById('hint-modal-text').innerText = q.hint || 'Read the question carefully!';
+      document.getElementById('hint-modal').classList.add('active');
+    }
+
+    function closeHint() {
+      document.getElementById('hint-modal').classList.remove('active');
+    }
+
+    window.onload = () => {
+      lucide.createIcons();
+      renderHome();
+    };
+  </script>
+</body>
+</html>

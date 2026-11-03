@@ -1,8 +1,8 @@
 {
   "name": "Class 4 Scholarship Exam App",
   "short_name": "Scholarship 4th",
-  "description": "Class 4 English Medium Scholarship Preparation App with 1 Lakh+ Questions and Marathi Grammar",
-  "start_url": "./app_preview.html",
+  "description": "Class 4 English Medium Scholarship Preparation App with 100 Questions Mock Test and Marathi Grammar",
+  "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#F4F6FB",
   "theme_color": "#4361EE",
