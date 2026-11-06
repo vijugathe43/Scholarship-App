@@ -3,8 +3,6 @@ name: Build Android APK
 on:
   push:
     branches: [ main, master ]
-  pull_request:
-    branches: [ main, master ]
   workflow_dispatch:
 
 jobs:
@@ -16,22 +14,7 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Detect and Fix Directory Structure
-        run: |
-          echo "Current directory contents:"
-          ls -la
-          # If uploaded as a subfolder, move files to root
-          if [ -d "Scolarship Project" ]; then
-            echo "Moving files from 'Scolarship Project' to root"
-            cp -r "Scolarship Project"/* .
-          elif [ -d "Scholarship Project" ]; then
-            echo "Moving files from 'Scholarship Project' to root"
-            cp -r "Scholarship Project"/* .
-          fi
-          mkdir -p assets
-          ls -la
-
-      - name: Set up Java JDK
+      - name: Set up Java JDK 17
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
@@ -43,17 +26,29 @@ jobs:
           channel: 'stable'
           cache: true
 
-      - name: Generate Clean Android Files
+      - name: Create full Flutter project scaffold
         run: |
-          flutter create temp_scaffold --platforms=android --org=com.scholarship.class4 --project-name=scholarship_app_4th
-          cp -r temp_scaffold/android .
-          rm -rf temp_scaffold
+          flutter create scaffold_tmp \
+            --platforms=android \
+            --org=com.scholarship.class4 \
+            --project-name=scholarship_app_4th
+          # Copy android folder to workspace
+          cp -r scaffold_tmp/android ./android
+          rm -rf scaffold_tmp
+          echo "Android folder ready:"
+          ls android/
 
       - name: Install Dependencies
         run: flutter pub get
 
+      - name: Verify Flutter setup
+        run: |
+          flutter doctor -v
+          echo "--- Dart files ---"
+          find lib -name "*.dart" | head -20
+
       - name: Build Debug APK
-        run: flutter build apk --debug
+        run: flutter build apk --debug --no-shrink
 
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
@@ -61,3 +56,4 @@ jobs:
         with:
           name: ScholarshipApp-Class4-APK
           path: build/app/outputs/flutter-apk/*.apk
+          if-no-files-found: warn
