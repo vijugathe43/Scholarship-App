@@ -20,6 +20,7 @@ jobs:
         run: |
           echo "Current directory contents:"
           ls -la
+          # If uploaded as a subfolder, move files to root
           if [ -d "Scolarship Project" ]; then
             echo "Moving files from 'Scolarship Project' to root"
             cp -r "Scolarship Project"/* .
