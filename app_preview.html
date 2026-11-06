@@ -762,7 +762,7 @@
       <div class="grand-test-card">
         <div class="grand-badge">🏆 100 MARKS GRAND MOCK TEST</div>
         <h3>Full Scholarship Exam<br>100 Questions • 100 Marks</h3>
-        <p class="grand-meta-text">प्रत्येकी १ गुण • २४ विभाग x २५ प्रश्न</p>
+        <p class="grand-meta-text">प्रत्येकी १ गुण • ४ विभाग x २५ प्रश्न</p>
         
         <div class="grand-grid-sections">
           <div class="grand-sec-pill"><span>🚩 मराठी व्याकरण</span> <span>25 Qs</span></div>
@@ -773,6 +773,20 @@
 
         <button class="btn-grand-start" onclick="startGrand100Test()">
           Start 100 Questions Test (100 Marks) 🚀
+        </button>
+      </div>
+
+      <!-- IN-APP INSTALL BUTTON FOR MOBILE -->
+      <div id="pwa-install-banner" style="background: linear-gradient(135deg, #10B981 0%, #059669 100%); border-radius: 18px; padding: 14px 16px; margin-bottom: 16px; color: white; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 4px 14px rgba(16, 185, 129, 0.3);">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <div style="font-size: 26px;">📲</div>
+          <div>
+            <h4 style="font-size: 14px; font-weight: 800;">मोबाईलमध्ये ॲप इन्स्टॉल करा</h4>
+            <p style="font-size: 11px; opacity: 0.95;">Install as Android App on Home Screen</p>
+          </div>
+        </div>
+        <button onclick="triggerPwaInstall()" style="background: white; color: #065F46; border: none; padding: 8px 14px; border-radius: 12px; font-weight: 900; font-size: 12px; cursor: pointer; box-shadow: 0 2px 6px rgba(0,0,0,0.15); flex-shrink: 0;">
+          Install ⬇
         </button>
       </div>
 
@@ -922,7 +936,7 @@
 
       <div class="action-row">
         <button class="btn-secondary" onclick="navigateTo('screen-home')">🏠 Home</button>
-        <button class="btn-next" style="flex: 1;" onclick="retryQuiz()">🔄 Try Again</button>
+        <button class="btn-next" style="flex: 1;" onclick="retryQuiz()">🔄 नवीन पेपर (New Paper)</button>
       </div>
 
       <h4 style="font-size: 15px; font-weight: 800; color: #1E293B; margin-bottom: 12px;">Answer Review</h4>
@@ -938,6 +952,26 @@
         <h4 style="font-size: 17px; font-weight: 800; margin-bottom: 8px;">Helpful Clue</h4>
         <p id="hint-modal-text" style="font-size: 13.5px; color: #64748B; margin-bottom: 16px;"></p>
         <button class="btn-next" onclick="closeHint()">समजले! (Got it!)</button>
+      </div>
+    </div>
+
+    <!-- ✅ Resume Quiz Modal -->
+    <div id="resume-modal" class="modal-overlay">
+      <div class="modal-card" style="text-align: left;">
+        <div style="font-size: 38px; text-align: center; margin-bottom: 10px;">📋</div>
+        <h4 style="font-size: 16px; font-weight: 900; color: #1E293B; text-align: center; margin-bottom: 6px;">
+          अर्धवट प्रश्नपत्रिका आहे!
+        </h4>
+        <p id="resume-modal-desc" style="font-size: 13px; color: #64748B; text-align: center; margin-bottom: 6px;">
+          तुम्ही आधी हा पेपर सोडला होता.
+        </p>
+        <div id="resume-progress-info" style="background: #EEF2FF; border-radius: 12px; padding: 10px 14px; margin-bottom: 16px; font-size: 13px; color: #4361EE; font-weight: 700; text-align: center;">
+          प्रश्न 0 / 100 पूर्ण • गुण: 0
+        </div>
+        <div class="action-row" style="gap: 10px;">
+          <button class="btn-secondary" style="flex: 1; font-size: 13px;" onclick="startFreshFromModal()">🆕 नवीन पेपर</button>
+          <button class="btn-next" style="flex: 1; font-size: 13px;" onclick="resumeSavedQuiz()">▶️ पुढे सुरू ठेवा</button>
+        </div>
       </div>
     </div>
   </div>
@@ -1186,6 +1220,12 @@
     let totalStars = 240;
     let testSections = [];
     let currentActiveSectionId = '';
+    // Track last test type for new paper generation
+    let lastTestType = null;   // 'grand100' | 'subject'
+    let lastTestSubjectId = null;
+    let lastTestTitle = '';
+    // ✅ Saved state for Resume feature
+    let savedQuizState = null;
 
     function navigateTo(screenId) {
       document.querySelectorAll('.app-screen').forEach(s => s.classList.remove('active'));
@@ -1220,19 +1260,56 @@
     }
 
     function openSubject(subId) {
+      // ✅ Check if user has a saved/paused test for this same subject
+      if (checkAndShowResumeModal('subject', subId)) {
+        // Resume modal shown — set pending fn for "New Paper" option
+        pendingStartFn = function() { openSubject(subId); };
+        return;
+      }
+
+      lastTestType = 'subject';
+      lastTestSubjectId = subId;
       if (subId === 'marathi') {
-        startQuiz('मराठी व्याकरण सराव (25 प्रश्न)', getMarathi25Questions());
+        lastTestTitle = 'मराठी व्याकरण सराव (25 प्रश्न)';
+        startQuiz(lastTestTitle, getMarathi25Questions());
       } else if (subId === 'maths') {
-        startQuiz('Mathematics Test (25 Qs)', getMaths25Questions());
+        lastTestTitle = 'Mathematics Test (25 Qs)';
+        startQuiz(lastTestTitle, getMaths25Questions());
       } else if (subId === 'english') {
-        startQuiz('English Language Test (25 Qs)', getEnglish25Questions());
+        lastTestTitle = 'English Language Test (25 Qs)';
+        startQuiz(lastTestTitle, getEnglish25Questions());
       } else {
-        startQuiz('बुद्धिमत्ता चाचणी (25 प्रश्न)', getIntelligence25Questions());
+        lastTestTitle = 'बुद्धिमत्ता चाचणी (25 प्रश्न)';
+        startQuiz(lastTestTitle, getIntelligence25Questions());
       }
     }
 
     // 100 QUESTIONS GRAND MOCK TEST
     function startGrand100Test() {
+      // ✅ Check if user has a saved/paused grand100 test to resume
+      if (checkAndShowResumeModal('grand100', null)) {
+        // Resume modal shown — set pending fn in case user picks "New Paper"
+        pendingStartFn = function() {
+          lastTestType = 'grand100';
+          lastTestTitle = '100 Questions Grand Mock Test (100 Marks)';
+          const qMarathi = getMarathi25Questions();
+          const qMaths = getMaths25Questions();
+          const qEnglish = getEnglish25Questions();
+          const qIntel = getIntelligence25Questions();
+          testSections = [
+            { id: 'marathi', title: '१. मराठी व्याकरण', emoji: '🚩', count: 25 },
+            { id: 'maths', title: '२. Mathematics', emoji: '🔢', count: 25 },
+            { id: 'english', title: '३. English', emoji: '📖', count: 25 },
+            { id: 'intelligence', title: '४. बुद्धिमत्ता', emoji: '🧠', count: 25 }
+          ];
+          startQuiz(lastTestTitle, [...qMarathi, ...qMaths, ...qEnglish, ...qIntel]);
+        };
+        return;
+      }
+
+      lastTestType = 'grand100';
+      lastTestTitle = '100 Questions Grand Mock Test (100 Marks)';
+
       const qMarathi = getMarathi25Questions();
       const qMaths = getMaths25Questions();
       const qEnglish = getEnglish25Questions();
@@ -1246,7 +1323,7 @@
       ];
 
       const full100 = [...qMarathi, ...qMaths, ...qEnglish, ...qIntel];
-      startQuiz('100 Questions Grand Mock Test (100 Marks)', full100);
+      startQuiz(lastTestTitle, full100);
     }
 
     function startQuiz(title, questions) {
@@ -1394,6 +1471,8 @@
     }
 
     function showResults() {
+      // ✅ Quiz completed fully — clear any saved state
+      savedQuizState = null;
       const total = activeQuestions.length;
       const pct = Math.round((currentScore / total) * 100);
       let stars = 1;
@@ -1465,20 +1544,91 @@
     }
 
     function retryQuiz() {
-      currentQIndex = 0;
-      currentScore = 0;
-      userAnswers = [];
-      currentActiveSectionId = activeQuestions[0].sectionId;
-      renderSectionTabs();
-      renderQuestion();
-      navigateTo('screen-quiz');
+      // ✅ FIX: Generate FRESH new questions instead of reusing old ones
+      if (lastTestType === 'grand100') {
+        startGrand100Test();
+      } else if (lastTestType === 'subject') {
+        openSubject(lastTestSubjectId);
+      } else {
+        // Fallback: restart with same questions if type unknown
+        currentQIndex = 0;
+        currentScore = 0;
+        userAnswers = [];
+        currentActiveSectionId = activeQuestions[0] ? activeQuestions[0].sectionId : '';
+        renderSectionTabs();
+        renderQuestion();
+        navigateTo('screen-quiz');
+      }
     }
 
     function confirmQuitQuiz() {
-      if (confirm('Do you want to leave this quiz? Your progress will be lost.')) {
-        navigateTo('screen-home');
+      // ✅ Save quiz state before going back so user can resume later
+      if (activeQuestions.length > 0 && currentQIndex < activeQuestions.length) {
+        savedQuizState = {
+          questions: activeQuestions,
+          qIndex: currentQIndex,
+          score: currentScore,
+          answers: [...userAnswers],
+          hasAnswered: hasAnswered,
+          testType: lastTestType,
+          subjectId: lastTestSubjectId,
+          title: lastTestTitle,
+          sections: testSections,
+          activeSectionId: currentActiveSectionId
+        };
       }
+      navigateTo('screen-home');
     }
+
+    // ✅ Check for saved state and show Resume modal if applicable
+    function checkAndShowResumeModal(incomingTestType, incomingSubjectId) {
+      if (
+        savedQuizState &&
+        savedQuizState.questions.length > 0 &&
+        savedQuizState.qIndex < savedQuizState.questions.length &&
+        savedQuizState.testType === incomingTestType &&
+        savedQuizState.subjectId === incomingSubjectId
+      ) {
+        const done = savedQuizState.qIndex;
+        const total = savedQuizState.questions.length;
+        const score = savedQuizState.score;
+        document.getElementById('resume-modal-desc').innerText =
+          '"' + savedQuizState.title + '"';
+        document.getElementById('resume-progress-info').innerText =
+          'प्रश्न ' + done + ' / ' + total + ' पूर्ण \u2022 गुण: ' + score + ' / ' + done;
+        document.getElementById('resume-modal').classList.add('active');
+        return true;
+      }
+      return false;
+    }
+
+    function resumeSavedQuiz() {
+      document.getElementById('resume-modal').classList.remove('active');
+      // ✅ Restore full state from saved snapshot
+      activeQuestions = savedQuizState.questions;
+      currentQIndex = savedQuizState.qIndex;
+      currentScore = savedQuizState.score;
+      userAnswers = savedQuizState.answers;
+      hasAnswered = savedQuizState.hasAnswered;
+      lastTestType = savedQuizState.testType;
+      lastTestSubjectId = savedQuizState.subjectId;
+      lastTestTitle = savedQuizState.title;
+      testSections = savedQuizState.sections;
+      currentActiveSectionId = savedQuizState.activeSectionId;
+      document.getElementById('quiz-title').innerText = lastTestTitle;
+      renderSectionTabs();
+      renderQuestion();
+      navigateTo('screen-quiz');
+      savedQuizState = null;
+    }
+
+    function startFreshFromModal() {
+      document.getElementById('resume-modal').classList.remove('active');
+      savedQuizState = null;
+      if (pendingStartFn) { pendingStartFn(); pendingStartFn = null; }
+    }
+
+    let pendingStartFn = null;
 
     function showHint() {
       const q = activeQuestions[currentQIndex];
@@ -1490,10 +1640,64 @@
       document.getElementById('hint-modal').classList.remove('active');
     }
 
+    // PWA Service Worker & Install Prompt Support
+    let deferredInstallPrompt = null;
+
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js')
+          .then(reg => console.log('SW Registered:', reg.scope))
+          .catch(err => console.log('SW Failed:', err));
+      });
+    }
+
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredInstallPrompt = e;
+      const banner = document.getElementById('pwa-install-banner');
+      if (banner) banner.style.display = 'flex';
+    });
+
+    function triggerPwaInstall() {
+      if (deferredInstallPrompt) {
+        deferredInstallPrompt.prompt();
+        deferredInstallPrompt.userChoice.then((choiceResult) => {
+          if (choiceResult.outcome === 'accepted') {
+            const banner = document.getElementById('pwa-install-banner');
+            if (banner) banner.style.display = 'none';
+          }
+          deferredInstallPrompt = null;
+        });
+      } else {
+        // Show manual install guide
+        document.getElementById('install-guide-modal').classList.add('active');
+      }
+    }
+
+    function closeInstallGuide() {
+      document.getElementById('install-guide-modal').classList.remove('active');
+    }
+
     window.onload = () => {
       lucide.createIcons();
       renderHome();
     };
   </script>
+
+  <!-- PWA Install Guide Modal -->
+  <div id="install-guide-modal" class="modal-overlay">
+    <div class="modal-card" style="max-width: 340px; text-align: left;">
+      <div style="font-size: 32px; text-align: center; margin-bottom: 8px;">📲</div>
+      <h4 style="font-size: 16px; font-weight: 800; text-align: center; margin-bottom: 12px; color: #1E293B;">
+        मोबाईलमध्ये कसे इन्स्टॉल करावे?
+      </h4>
+      <div style="font-size: 13px; color: #475569; line-height: 1.5; margin-bottom: 16px;">
+        <p style="margin-bottom: 8px;"><strong>पायरी १:</strong> तुमच्या मोबाईलच्या Chrome मध्ये वर उजव्या कोपऱ्यात असलेल्या <strong>३ ठिपक्यांवर (⋮)</strong> क्लिक करा.</p>
+        <p style="margin-bottom: 8px;"><strong>पायरी २:</strong> खाली आलेल्या मेनूमध्ये <strong>"Install app"</strong> किंवा <strong>"Add to Home screen"</strong> वर दाबा.</p>
+        <p><strong>पायरी ३:</strong> हे ॲप लगेच तुमच्या मोबाईलच्या स्क्रीनवर खऱ्या ॲपसारखे सेव्ह होईल!</p>
+      </div>
+      <button class="btn-next" onclick="closeInstallGuide()">समजले! (Close)</button>
+    </div>
+  </div>
 </body>
 </html>
